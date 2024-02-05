@@ -1,1 +1,3 @@
 https://excalidraw.com/#json=lOH6ZefyATBSSE8iRAUhf,UG4QV2cVE5vh1AvTTFKS3Q
+
+To fix issue with pagination whereby num of pages is greater than 10 on a small screen
