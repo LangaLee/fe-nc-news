@@ -5,3 +5,5 @@ To fix issue with pagination whereby num of pages is greater than 10 on a small 
 Add remove vote functionality
 
 fix show comments and back to articles section for mobile devices
+
+fix voting functionality so that a person can only vote once

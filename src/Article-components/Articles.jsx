@@ -22,7 +22,6 @@ const Articles = () => {
   useEffect(() => {
     getAllArticles(setArticles, setIsLoading);
   }, []);
-
   return (
     <div>
       <h2 className=" text-3xl mb-7 text-center">
