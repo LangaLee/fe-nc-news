@@ -3,11 +3,30 @@ import { useEffect, useState } from "react";
 import getArticleById from "../api-calls/getArticleById";
 import addVotes from "../api-calls/addVotes";
 import { useParams } from "react-router-dom";
+import Loading from "../Main-components/Loading";
+import getComments from "../api-calls/getComments";
+import DisplayComments from "./DisplayComments";
 
 const Article = () => {
   const [article, setArticle] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const articleId = useParams().article_id;
+  const [hideComments, setHideComments] = useState({
+    state: "Show Comments",
+    hidden: true,
+  });
+  const [comments, setComments] = useState(null);
+
+  const toggleComments = () => {
+    if (hideComments.hidden === true) {
+      setHideComments({ state: "Hide Comments", hidden: false });
+    } else {
+      setHideComments({
+        state: "Show Comments",
+        hidden: true,
+      });
+    }
+  };
 
   const displayArticle = () => {
     return article.map((article) => {
@@ -43,7 +62,7 @@ const Article = () => {
                     articleCopy.votes = articleCopy.votes + 1;
                     setArticle([articleCopy]);
                   }}
-                  className="rounded-md border-solid border-2 hover:bg-blue-900 mt-4 text-2xl"
+                  className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 text-2xl"
                 >
                   add Vote
                 </button>
@@ -57,19 +76,34 @@ const Article = () => {
   };
 
   useEffect(() => {
-    getArticleById(articleId, setArticle);
-  }, [articleId]);
+    getArticleById(articleId, setArticle, setIsLoading);
+    getComments(articleId, setComments);
+  }, []);
 
   return (
     <div className="text-xl">
-      {article === null ? null : displayArticle()}
-      <div className="flex justify-end mr-4">
-        <label htmlFor="back-to-articles">All articles here 👉</label>
-        <Link to={"/articles"}>
-          <button className="rounded-md border-solid border-2 hover:bg-blue-900 ml-4  text-2xl">
-            Articles
-          </button>
-        </Link>
+      {isLoading ? <Loading /> : displayArticle()}
+      <div className="flex justify-between mr-4">
+        <button
+          className="rounded-md border-solid border-2 hover:bg-blue-900 ml-4  text-2xl p-1"
+          onClick={toggleComments}
+        >
+          {hideComments.state}
+        </button>
+        <div>
+          <label htmlFor="back-to-articles">All articles here 👉</label>
+          <Link to={"/articles"}>
+            <button
+              id="back-to-articles"
+              className="rounded-md border-solid border-2 hover:bg-blue-900 ml-4  text-2xl p-1"
+            >
+              Articles
+            </button>
+          </Link>
+        </div>
+      </div>
+      <div>
+        {hideComments.hidden ? null : <DisplayComments comments={comments} />}
       </div>
     </div>
   );
