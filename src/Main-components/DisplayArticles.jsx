@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const DisplayArticles = ({ articles }) => {
   return articles.map((article) => {
     return (
@@ -9,9 +11,11 @@ const DisplayArticles = ({ articles }) => {
         <img variant="top" src={article.article_img_url} className="" />
         <div className="flex justify-between ">
           <h5>By: {article.author}</h5>
-          <button className=" rounded-md border-solid border-2 border-lime-950 hover:bg-blue-500 hover:text-black ">
-            View Article
-          </button>
+          <Link to={`/articles/${article.article_id}`}>
+            <button className=" rounded-md border-solid border-2 border-lime-950 hover:bg-blue-500 hover:text-black">
+              View Article
+            </button>
+          </Link>
         </div>
       </div>
     );
