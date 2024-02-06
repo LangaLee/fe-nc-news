@@ -12,4 +12,19 @@ const getComments = async (id, setComments) => {
   }
 };
 
+export const postComment = (comment, setShowCommentInput, setHideComments) => {
+  try {
+    if (comment !== null) {
+      setShowCommentInput(false);
+      setHideComments({
+        state: "Hide Comments",
+        hidden: false,
+      });
+    }
+    console.log(comment);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default getComments;

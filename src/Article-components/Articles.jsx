@@ -1,7 +1,7 @@
 import getAllArticles from "../api-calls/getArticles";
 import { useState, useEffect } from "react";
 import DisplayArticles from "../Main-components/DisplayArticles";
-import Pagination from "../Main-components/Pagination";
+import Pagination from "../Reusable-components/Pagination";
 import Loading from "../Main-components/Loading";
 
 const Articles = () => {

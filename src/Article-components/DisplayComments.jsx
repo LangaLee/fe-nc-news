@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Pagination from "../Main-components/Pagination";
+import Pagination from "../Reusable-components/Pagination";
 const DisplayComments = ({ comments }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const commentsPerPage = 5;
