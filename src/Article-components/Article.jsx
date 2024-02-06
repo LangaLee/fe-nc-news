@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import getArticleById from "../api-calls/getArticleById";
-import addVotes from "../api-calls/addVotes";
+import updateVotes from "../api-calls/updateVotes";
 import { useParams } from "react-router-dom";
 import Loading from "../Main-components/Loading";
 import getComments from "../api-calls/getComments";
@@ -16,6 +16,7 @@ const Article = () => {
     hidden: true,
   });
   const [comments, setComments] = useState(null);
+  const [errorVoting, setErrorVoting] = useState(false);
 
   const toggleComments = () => {
     if (hideComments.hidden === true) {
@@ -52,20 +53,41 @@ const Article = () => {
               {window.innerWidth < 1600 ? Image() : null}
               <p className="mt-4">{article.body}</p>{" "}
               <div className="flex justify-around">
-                <p className="text-2xl font-semibold mt-4">
-                  Votes: {article.votes}
-                </p>
-                <button
-                  onClick={() => {
-                    addVotes(articleId);
-                    const articleCopy = { ...article };
-                    articleCopy.votes = articleCopy.votes + 1;
-                    setArticle([articleCopy]);
-                  }}
-                  className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 text-2xl"
-                >
-                  add Vote
-                </button>
+                {errorVoting ? (
+                  <p className="text-2xl mt-4">There was an issue voting</p>
+                ) : (
+                  <p className="text-2xl font-semibold mt-4">
+                    Votes: {article.votes}
+                  </p>
+                )}
+                <div>
+                  <button
+                    onClick={() => {
+                      updateVotes(articleId, true, setErrorVoting);
+                      if (errorVoting === false) {
+                        const articleCopy = { ...article };
+                        articleCopy.votes = articleCopy.votes + 1;
+                        setArticle([articleCopy]);
+                      }
+                    }}
+                    className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 text-2xl"
+                  >
+                    add Vote
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateVotes(articleId, false, setErrorVoting);
+                      if (errorVoting === false) {
+                        const articleCopy = { ...article };
+                        articleCopy.votes = articleCopy.votes - 1;
+                        setArticle([articleCopy]);
+                      }
+                    }}
+                    className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 ml-4 text-2xl"
+                  >
+                    remove Vote
+                  </button>
+                </div>
               </div>
             </div>
             {window.innerWidth > 1600 ? Image() : null}
