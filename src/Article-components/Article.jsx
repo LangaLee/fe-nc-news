@@ -4,8 +4,10 @@ import getArticleById from "../api-calls/getArticleById";
 import updateVotes from "../api-calls/updateVotes";
 import { useParams } from "react-router-dom";
 import Loading from "../Main-components/Loading";
-import getComments from "../api-calls/getComments";
+import getComments from "../api-calls/comments";
 import DisplayComments from "./DisplayComments";
+import Button from "../Reusable-components/Button";
+import CommentInput from "./CommentInput";
 
 const Article = () => {
   const [article, setArticle] = useState(null);
@@ -17,6 +19,12 @@ const Article = () => {
   });
   const [comments, setComments] = useState(null);
   const [errorVoting, setErrorVoting] = useState(false);
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [errorPostingComment, setErrorPostingComment] = useState(null);
+
+  const addComment = () => {
+    setShowCommentInput(true);
+  };
 
   const toggleComments = () => {
     if (hideComments.hidden === true) {
@@ -105,13 +113,19 @@ const Article = () => {
   return (
     <div className="text-xl">
       {isLoading ? <Loading /> : displayArticle()}
+      <div>
+        <Button value={"Add Comment"} func={addComment} />
+        {showCommentInput ? (
+          <CommentInput
+            setShowCommentInput={setShowCommentInput}
+            setHideComments={setHideComments}
+            articleId={articleId}
+            setComments={setComments}
+          />
+        ) : null}
+      </div>
       <div className="flex justify-between mr-4">
-        <button
-          className="rounded-md border-solid border-2 hover:bg-blue-900 ml-4  text-2xl p-1"
-          onClick={toggleComments}
-        >
-          {hideComments.state}
-        </button>
+        <Button value={hideComments.state} func={toggleComments} />
         <div>
           <label htmlFor="back-to-articles">All articles here 👉</label>
           <Link to={"/articles"}>
