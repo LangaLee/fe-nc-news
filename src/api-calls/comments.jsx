@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useContext } from "react";
+import loggedInUserContext from "../context/loggedInContext";
 
 const getComments = async (articleId, setComments) => {
   try {
@@ -16,7 +18,8 @@ export const postComment = async (
   comment,
   setShowCommentInput,
   setHideComments,
-  articleId
+  articleId,
+  loggedIn
 ) => {
   try {
     if (comment !== null) {
@@ -28,11 +31,9 @@ export const postComment = async (
 
       await axios.post(
         `https://fun-news.onrender.com/api/articles/${articleId}/comments`,
-        { username: "cooljmessy", body: comment }
+        { username: loggedIn.user, body: comment }
       );
     }
-    console.log(articleId);
-    console.log(comment);
   } catch (error) {
     console.log(error);
   }

@@ -11,16 +11,9 @@ const DisplayComments = ({ comments, deletedComment, setDeletedComment }) => {
   const indexOfFirstComment = indexOfLastComment - commentsPerPage;
   const { loggedIn } = useContext(loggedInUserContext);
 
-  const commentsCopy = JSON.parse(JSON.stringify(comments));
-
   // sort the comments by date creaed so that when a user makes a new comment they can see it
-  const [sortedComments, setSortedComments] = useState(
-    commentsCopy.sort((a, b) => {
-      return b.created_at.localeCompare(a.created_at);
-    })
-  );
 
-  const commentsToDisplay = sortedComments.slice(
+  const commentsToDisplay = comments.slice(
     indexOfFirstComment,
     indexOfLastComment
   );
