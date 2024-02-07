@@ -1,8 +1,9 @@
 import getAllArticles from "../api-calls/getArticles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import DisplayArticles from "../Main-components/DisplayArticles";
 import Pagination from "../Reusable-components/Pagination";
 import Loading from "../Main-components/Loading";
+import urlContext from "../context/urlContext";
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -19,7 +20,10 @@ const Articles = () => {
   );
   const numOfPages = Math.ceil(articles.length / articlesPerPage);
 
+  const { setUrl } = useContext(urlContext);
+
   useEffect(() => {
+    setUrl("/articles");
     getAllArticles(setArticles, setIsLoading);
   }, []);
   return (

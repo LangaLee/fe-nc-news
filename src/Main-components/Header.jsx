@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Button from "../Reusable-components/Button";
 import { useContext } from "react";
 import loggedInUserContext from "../context/loggedInContext";
+import Divider from "../Reusable-components/Divider";
 
 const Header = () => {
   const { loggedIn } = useContext(loggedInUserContext);
@@ -28,7 +29,7 @@ const Header = () => {
                 <img
                   src={loggedIn.profile_pic}
                   alt={`profile picture for the user ${loggedIn.user}`}
-                  className=" h-16"
+                  className=" h-16 w-16 rounded-full "
                 />
               </div>
             </div>

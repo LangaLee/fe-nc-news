@@ -4,11 +4,15 @@ import Button from "../Reusable-components/Button.jsx";
 import Divider from "../Reusable-components/Divider.jsx";
 import Loading from "./Loading.jsx";
 import loggedInUserContext from "../context/loggedInContext.jsx";
+import urlContext from "../context/urlContext.jsx";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { setLoggedIn } = useContext(loggedInUserContext);
   const [users, setUsers] = useState([]);
   const [isloading, setIsLoading] = useState(true);
+  const { url } = useContext(urlContext);
+
   useEffect(() => {
     fetchUsers(setUsers, setIsLoading);
   }, []);
@@ -24,15 +28,17 @@ const Login = () => {
             return (
               <nav key={index} className=" text-center">
                 <Divider key={index} />
-                <button
-                  className="m-4"
-                  key={user.username}
-                  onClick={(e) => {
-                    handleLogin(e, user.avatar_url);
-                  }}
-                >
-                  {user.username}
-                </button>
+                <Link to={url}>
+                  <button
+                    className="m-4"
+                    key={user.username}
+                    onClick={(e) => {
+                      handleLogin(e, user.avatar_url);
+                    }}
+                  >
+                    {user.username}
+                  </button>
+                </Link>
               </nav>
             );
           })}

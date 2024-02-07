@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import getArticleById from "../api-calls/getArticleById";
 import updateVotes from "../api-calls/updateVotes";
 import { useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import getComments from "../api-calls/comments";
 import DisplayComments from "./DisplayComments";
 import Button from "../Reusable-components/Button";
 import CommentInput from "./CommentInput";
+import urlContext from "../context/urlContext";
 
 const Article = () => {
   const [article, setArticle] = useState(null);
@@ -21,6 +22,11 @@ const Article = () => {
   const [errorVoting, setErrorVoting] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [errorPostingComment, setErrorPostingComment] = useState(null);
+  const { setUrl } = useContext(urlContext);
+
+  useEffect(() => {
+    setUrl(`/articles/${articleId}`);
+  }, []);
 
   const addComment = () => {
     setShowCommentInput(true);
