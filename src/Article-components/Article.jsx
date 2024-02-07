@@ -110,6 +110,8 @@ const Article = () => {
     getComments(articleId, setComments);
   }, []);
 
+  const [deletedComment, setDeletedComment] = useState([]);
+
   return (
     <div className="text-xl">
       {isLoading ? <Loading /> : displayArticle()}
@@ -139,7 +141,13 @@ const Article = () => {
         </div>
       </div>
       <div>
-        {hideComments.hidden ? null : <DisplayComments comments={comments} />}
+        {hideComments.hidden ? null : (
+          <DisplayComments
+            comments={comments}
+            deletedComment={deletedComment}
+            setDeletedComment={setDeletedComment}
+          />
+        )}
       </div>
     </div>
   );

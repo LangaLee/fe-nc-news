@@ -12,3 +12,5 @@ fix voting functionality so that a person can only vote once
 fix comment input such that it expands instead of using a scroll bar
 
 add sorted functionality to comments
+
+what happens when you try delete a comment and you are offline ?

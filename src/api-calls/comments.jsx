@@ -38,4 +38,14 @@ export const postComment = async (
   }
 };
 
+export const deleteComment = async (comment_id) => {
+  try {
+    await axios.delete(
+      `https://fun-news.onrender.com/api/comments/${comment_id}`
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default getComments;
