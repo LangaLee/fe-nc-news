@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { postComment } from "../api-calls/comments";
 import Button from "../Reusable-components/Button";
 
-const CommentInput = ({ setShowCommentInput, setHideComments }) => {
+const CommentInput = ({
+  setShowCommentInput,
+  setHideComments,
+  articleId,
+  setComments,
+}) => {
   // on submit check if user is logged in
 
   const [commentInput, setCommentInput] = useState("");
@@ -11,12 +16,23 @@ const CommentInput = ({ setShowCommentInput, setHideComments }) => {
   const handleComment = (e) => {
     setCommentInput(e.target.value);
   };
-  const handleSubmit = () => {
-    console.log(comment);
-  };
 
   useEffect(() => {
-    postComment(comment, setShowCommentInput, setHideComments);
+    postComment(comment, setShowCommentInput, setHideComments, articleId);
+
+    // optimistically render the commnent here
+    if (comment !== null) {
+      setComments((prevState) => [
+        ...prevState,
+        {
+          comment_id: prevState[prevState.length - 1].comment_id + 1,
+          body: comment,
+          author: "cooljmessy",
+          votes: 0,
+          created_at: `${new Date()}`,
+        },
+      ]);
+    }
   }, [comment]);
 
   return (

@@ -119,6 +119,8 @@ const Article = () => {
           <CommentInput
             setShowCommentInput={setShowCommentInput}
             setHideComments={setHideComments}
+            articleId={articleId}
+            setComments={setComments}
           />
         ) : null}
       </div>

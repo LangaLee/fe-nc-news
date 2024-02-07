@@ -7,11 +7,21 @@ const DisplayComments = ({ comments }) => {
   const indexOfLastComment = currentPage * commentsPerPage;
   const indexOfFirstComment = indexOfLastComment - commentsPerPage;
 
-  const commentsToDisplay = comments.slice(
+  const commentsCopy = JSON.parse(JSON.stringify(comments));
+
+  // sort the comments by date creaed so that when a user makes a new comment they can see it
+  const [sortedComments, setSortedComments] = useState(
+    commentsCopy.sort((a, b) => {
+      return b.created_at.localeCompare(a.created_at);
+    })
+  );
+
+  const commentsToDisplay = sortedComments.slice(
     indexOfFirstComment,
     indexOfLastComment
   );
 
+  console.log(comments);
   return (
     <div className="m-4">
       {commentsToDisplay.map((comment) => (
