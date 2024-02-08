@@ -47,11 +47,11 @@ const Articles = () => {
     setArticlesToDisplay(
       articlesCopy.slice(indexOfFirstArticle, indexOfLastArticle)
     );
-  }, [order, articles.length, sortParameter]);
+  }, [order, articles.length, sortParameter, currentPage]);
 
   const numOfPages = Math.ceil(articles.length / articlesPerPage);
 
-  const displayProperty = topic || "Popularity";
+  const displayProperty = topic;
 
   const handleOrder = () => {
     if (order === "DESC") setOrder("ASC");
@@ -66,7 +66,9 @@ const Articles = () => {
     <div>
       <div className="flex justify-between sticky top-20 bg-slate-950 h-20 overflow-visible">
         <h2 className=" text-3xl mt-4 text-center">
-          Displaying articles by {displayProperty}
+          {displayProperty
+            ? `Displaying all ${displayProperty} articles`
+            : `Displaying All Articles`}
         </h2>
         <div className="flex flex-row">
           <div className="flex flex-row">
