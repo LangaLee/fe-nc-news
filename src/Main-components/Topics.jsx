@@ -11,7 +11,6 @@ const Topics = () => {
   useEffect(() => {
     getTopics(setTopics, setIsLoading);
   }, []);
-  console.log(topics);
 
   return (
     <>
