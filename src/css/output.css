@@ -544,6 +544,10 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.static {
+  position: static;
+}
+
 .sticky {
   position: sticky;
 }
@@ -562,6 +566,14 @@ video {
 
 .m-4 {
   margin: 1rem;
+}
+
+.m-8 {
+  margin: 2rem;
+}
+
+.m-10 {
+  margin: 2.5rem;
 }
 
 .mb-3 {
@@ -783,6 +795,10 @@ video {
 
 .text-center {
   text-align: center;
+}
+
+.align-middle {
+  vertical-align: middle;
 }
 
 .align-text-top {

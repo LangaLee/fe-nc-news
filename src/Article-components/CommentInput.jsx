@@ -12,18 +12,20 @@ const CommentInput = ({
   const { loggedIn } = useContext(loggedInUserContext);
   const [commentInput, setCommentInput] = useState("");
   const [comment, setcomment] = useState(null);
+  const [commentInputError, setCommentInputError] = useState(false);
 
   const handleComment = (e) => {
     setCommentInput(e.target.value);
   };
 
   useEffect(() => {
+    const postData = { username: loggedIn.user, body: comment };
     postComment(
-      comment,
+      postData,
       setShowCommentInput,
       setHideComments,
       articleId,
-      loggedIn
+      setCommentInputError
     );
 
     // optimistically render the commnent here
@@ -58,6 +60,9 @@ const CommentInput = ({
           placeholder="Comment here..."
           required={true}
         ></textarea>
+        {commentInputError ? (
+          <p className=" m-4">Comment cannot be only whitespaces!!!</p>
+        ) : null}
         <Button value={"Post Comment"} />
       </form>
     </div>

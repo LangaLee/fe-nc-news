@@ -3,13 +3,14 @@ import Button from "../Reusable-components/Button";
 import { useContext } from "react";
 import loggedInUserContext from "../context/loggedInContext";
 import Divider from "../Reusable-components/Divider";
-
+import errorContext from "../context/error";
 const Header = () => {
   const { loggedIn } = useContext(loggedInUserContext);
+  const { setError, error } = useContext(errorContext);
 
   return (
     <div className="flex sticky top-0 items-center h-20 bg-black justify-between">
-      <Link to={"/"}>
+      <Link to={"/"} onClick={() => setError(false)}>
         <h1 className="text-7xl">NC News</h1>
       </Link>
       <div>

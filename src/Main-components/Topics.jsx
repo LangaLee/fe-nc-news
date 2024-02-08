@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import getTopics from "../api-calls/getTopics";
-import Divider from "../Reusable-components/Divider";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
-import { TabPane } from "react-bootstrap";
 
-const Topics = () => {
+const Topics = ({ value }) => {
   const [topics, setTopics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -15,8 +13,10 @@ const Topics = () => {
   return (
     <>
       {!isLoading ? (
-        <div className="flex flex-col ml-4 mt-16">
-          <h3 className="mb-8 text-5xl">Article Topics</h3>
+        <div className="flex flex-col ml-4 mt-16 ">
+          <h3 className="mb-8 text-5xl text-center">
+            {value ? value : "Article Topics"}
+          </h3>
 
           {topics.map((topic) => (
             <div

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext } from "react";
 import loggedInUserContext from "../context/loggedInContext";
 
-const getComments = async (articleId, setComments) => {
+const getComments = async (articleId, setComments, setError) => {
   try {
     const response = axios.get(
       `https://fun-news.onrender.com/api/articles/${articleId}/comments`
@@ -10,7 +10,9 @@ const getComments = async (articleId, setComments) => {
     const comments = (await response).data.comments;
     setComments(comments);
   } catch (error) {
-    console.log(error);
+    setError((prev) => {
+      if (prev === false) return "Could not load comments";
+    });
   }
 };
 
@@ -19,10 +21,13 @@ export const postComment = async (
   setShowCommentInput,
   setHideComments,
   articleId,
-  loggedIn
+  setCommentInputError
 ) => {
   try {
-    if (comment !== null) {
+    if (!/\w/gi.test(comment.body)) {
+      throw { msg: "whitespaces only" };
+    }
+    if (comment.body !== null) {
       setShowCommentInput(false);
       setHideComments({
         state: "Hide Comments",
@@ -31,11 +36,13 @@ export const postComment = async (
 
       await axios.post(
         `https://fun-news.onrender.com/api/articles/${articleId}/comments`,
-        { username: loggedIn.user, body: comment }
+        comment
       );
     }
   } catch (error) {
-    console.log(error);
+    if (error.msg === "whitespaces only") {
+      setCommentInputError(true);
+    }
   }
 };
 
@@ -45,7 +52,7 @@ export const deleteComment = async (comment_id) => {
       `https://fun-news.onrender.com/api/comments/${comment_id}`
     );
   } catch (error) {
-    console.log(error);
+    // setError(true);
   }
 };
 
