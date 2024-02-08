@@ -8,7 +8,7 @@ const Header = () => {
   const { loggedIn } = useContext(loggedInUserContext);
 
   return (
-    <div className="flex  items-center justify-between mb-8">
+    <div className="flex sticky top-0 items-center h-20 bg-black justify-between">
       <Link to={"/"}>
         <h1 className="text-7xl">NC News</h1>
       </Link>

@@ -22,8 +22,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/articles" element={<Articles />} />
             <Route path="/" element={<Home />} />
+            <Route path="/:article_id" element={<Article />} />
             <Route path="/articles/:topic" element={<Articles />} />
-            <Route path="/articles/:article_id" element={<Article />} />
           </Routes>
         </urlContext.Provider>
       </loggedInUserContext.Provider>
