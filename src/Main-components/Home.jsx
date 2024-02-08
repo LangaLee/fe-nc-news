@@ -1,13 +1,19 @@
 import { Link } from "react-router-dom";
 import Button from "../Reusable-components/Button";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import urlContext from "../context/urlContext";
+import getAllArticles from "../api-calls/getArticles";
+import Recommended from "../Article-components/Recommended";
+import Topics from "./Topics";
 
 const Home = () => {
   const { url, setUrl } = useContext(urlContext);
 
+  const [trending, setTrending] = useState(null);
+
   useEffect(() => {
     setUrl("/");
+    getAllArticles(setTrending, null, "trending");
   }, []);
 
   return (
@@ -19,6 +25,10 @@ const Home = () => {
         <Link to={"/articles"}>
           <Button id="all-articles" value={"All Articles"} />
         </Link>
+      </div>
+      <div className="flex justify-between mr-4">
+        <Recommended trending={trending} />
+        <Topics />
       </div>
     </div>
   );

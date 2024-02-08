@@ -14,7 +14,7 @@ function App() {
   const [url, setUrl] = useState("");
 
   return (
-    <div className="text-white">
+    <div className=" text-white ">
       <loggedInUserContext.Provider value={{ loggedIn, setLoggedIn }}>
         <urlContext.Provider value={{ url, setUrl }}>
           <Header />
@@ -22,6 +22,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/articles" element={<Articles />} />
             <Route path="/" element={<Home />} />
+            <Route path="/articles/:topic" element={<Articles />} />
             <Route path="/articles/:article_id" element={<Article />} />
           </Routes>
         </urlContext.Provider>
