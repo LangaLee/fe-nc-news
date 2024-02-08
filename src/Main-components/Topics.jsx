@@ -13,7 +13,7 @@ const Topics = ({ value }) => {
   return (
     <>
       {!isLoading ? (
-        <div className="flex flex-col ml-4 mt-16 ">
+        <div className="flex flex-col ml-4 mt-16 h-max">
           <h3 className="mb-8 text-5xl text-center">
             {value ? value : "Article Topics"}
           </h3>
