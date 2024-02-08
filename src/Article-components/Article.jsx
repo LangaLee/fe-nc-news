@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import getArticleById from "../api-calls/getArticleById";
 import updateVotes from "../api-calls/updateVotes";
 import { useParams } from "react-router-dom";
@@ -8,8 +8,11 @@ import getComments from "../api-calls/comments";
 import DisplayComments from "./DisplayComments";
 import Button from "../Reusable-components/Button";
 import CommentInput from "./CommentInput";
+import urlContext from "../context/urlContext";
+import loggedInUserContext from "../context/loggedInContext";
 
 const Article = () => {
+  const { loggedIn } = useContext(loggedInUserContext);
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const articleId = useParams().article_id;
@@ -21,6 +24,11 @@ const Article = () => {
   const [errorVoting, setErrorVoting] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [errorPostingComment, setErrorPostingComment] = useState(null);
+  const { setUrl } = useContext(urlContext);
+
+  useEffect(() => {
+    setUrl(`/articles/${articleId}`);
+  }, []);
 
   const addComment = () => {
     setShowCommentInput(true);
@@ -109,14 +117,26 @@ const Article = () => {
     getArticleById(articleId, setArticle, setIsLoading);
     getComments(articleId, setComments);
   }, []);
-
+  const commentsCopy = JSON.parse(JSON.stringify(comments));
+  const [sortedComments, setSortedComments] = useState([]);
+  useEffect(() => {
+    if (comments !== null) {
+      setSortedComments(
+        commentsCopy.sort((a, b) => {
+          return b.created_at.localeCompare(a.created_at);
+        })
+      );
+    }
+  }, [comments]);
   const [deletedComment, setDeletedComment] = useState([]);
 
   return (
     <div className="text-xl">
       {isLoading ? <Loading /> : displayArticle()}
       <div>
-        <Button value={"Add Comment"} func={addComment} />
+        {loggedIn.value ? (
+          <Button value={"Add Comment"} func={addComment} />
+        ) : null}
         {showCommentInput ? (
           <CommentInput
             setShowCommentInput={setShowCommentInput}
@@ -143,7 +163,7 @@ const Article = () => {
       <div>
         {hideComments.hidden ? null : (
           <DisplayComments
-            comments={comments}
+            comments={sortedComments}
             deletedComment={deletedComment}
             setDeletedComment={setDeletedComment}
           />

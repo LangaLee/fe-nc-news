@@ -1,8 +1,10 @@
 import getAllArticles from "../api-calls/getArticles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import DisplayArticles from "../Main-components/DisplayArticles";
 import Pagination from "../Reusable-components/Pagination";
 import Loading from "../Main-components/Loading";
+import urlContext from "../context/urlContext";
+import { useParams } from "react-router-dom";
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -19,13 +21,19 @@ const Articles = () => {
   );
   const numOfPages = Math.ceil(articles.length / articlesPerPage);
 
+  const { setUrl } = useContext(urlContext);
+
+  const topic = useParams().topic;
+  const displayProperty = topic || "Popularity";
+  console.log(topic);
   useEffect(() => {
-    getAllArticles(setArticles, setIsLoading);
+    setUrl("/articles");
+    getAllArticles(setArticles, setIsLoading, topic);
   }, []);
   return (
     <div>
       <h2 className=" text-3xl mb-7 text-center">
-        Displaying articles by popularity
+        Displaying articles by {displayProperty}
       </h2>
       <div className="flex flex-wrap justify-center ">
         {isLoading ? (
