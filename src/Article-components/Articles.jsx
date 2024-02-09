@@ -7,6 +7,7 @@ import urlContext from "../context/urlContext";
 import { useParams, useSearchParams } from "react-router-dom";
 import Button from "../Reusable-components/Button";
 import ShowSortOptions from "../Reusable-components/HandleSort";
+import errorContext from "../context/error";
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -15,6 +16,7 @@ const Articles = () => {
   const [articlesPerPage] = useState(articlesPerRow * 3);
   const [isLoading, setIsLoading] = useState(true);
   const { setUrl } = useContext(urlContext);
+  const { setError } = useContext(errorContext);
   const sortBy = useSearchParams();
   const [sortParameter, setSortParameter] = useState(
     sortBy[0].get("sort_by") || "created_at"
@@ -60,7 +62,7 @@ const Articles = () => {
 
   useEffect(() => {
     setUrl("/articles");
-    getAllArticles(setArticles, setIsLoading, topic);
+    getAllArticles(setArticles, setIsLoading, topic, setError, sortParameter);
   }, []);
   return (
     <div>

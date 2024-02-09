@@ -10,6 +10,7 @@ import Button from "../Reusable-components/Button";
 import CommentInput from "./CommentInput";
 import urlContext from "../context/urlContext";
 import loggedInUserContext from "../context/loggedInContext";
+import errorContext from "../context/error";
 
 const Article = () => {
   const { loggedIn } = useContext(loggedInUserContext);
@@ -24,11 +25,8 @@ const Article = () => {
   const [errorVoting, setErrorVoting] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [errorPostingComment, setErrorPostingComment] = useState(null);
+  const { setError } = useContext(errorContext);
   const { setUrl } = useContext(urlContext);
-
-  useEffect(() => {
-    setUrl(`/articles/${articleId}`);
-  }, []);
 
   const addComment = () => {
     setShowCommentInput(true);
@@ -114,8 +112,9 @@ const Article = () => {
   };
 
   useEffect(() => {
-    getArticleById(articleId, setArticle, setIsLoading);
-    getComments(articleId, setComments);
+    getComments(articleId, setComments, setError);
+    getArticleById(articleId, setArticle, setIsLoading, setError);
+    setUrl(`/${articleId}`);
   }, []);
   const commentsCopy = JSON.parse(JSON.stringify(comments));
   const [sortedComments, setSortedComments] = useState([]);

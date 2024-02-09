@@ -26,9 +26,9 @@ const Home = () => {
           <Button id="all-articles" value={"All Articles"} />
         </Link>
       </div>
-      <div className="flex justify-between mr-4">
-        <Recommended trending={trending} />
+      <div className="flex flex-wrap justify-around mr-4">
         <Topics />
+        <Recommended trending={trending} />
       </div>
     </div>
   );
