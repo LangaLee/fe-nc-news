@@ -30,19 +30,37 @@ const Pagination = ({ currentPage, setCurrentPage, numOfPages }) => {
     <nav>
       <ul className="flex justify-center w-screen">
         <li>
-          <button className="m-2" onClick={prevPage}>
+          <button className="m-4" onClick={prevPage}>
             Previous
           </button>
         </li>
 
-        {curPages.map((num) => (
-          <button key={num} className="m-2" onClick={() => setCurrentPage(num)}>
-            {num}
-          </button>
-        ))}
+        {curPages.map((num) => {
+          if (num === currentPage) {
+            return (
+              <button
+                key={num}
+                className="m-2 rounded-md border-solid border-2 p-2"
+                onClick={() => setCurrentPage(num)}
+              >
+                {num}
+              </button>
+            );
+          } else {
+            return (
+              <button
+                key={num}
+                className="m-2"
+                onClick={() => setCurrentPage(num)}
+              >
+                {num}
+              </button>
+            );
+          }
+        })}
 
         <li>
-          <button className="m-2" onClick={nextPage}>
+          <button className="m-4" onClick={nextPage}>
             Next
           </button>
         </li>
