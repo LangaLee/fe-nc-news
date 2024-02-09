@@ -13,11 +13,11 @@ const ShowSortOptions = ({ sortParameter, setSortParameter }) => {
   ];
 
   return (
-    <>
-      <p className="text-2xl mt-5">Sort by </p>
+    <div className="flex">
+      <p className="text-xl mt-5">Sort by </p>
       <div className="flex flex-col">
         <button
-          className="rounded-md border-solid border-2 hover:bg-blue-900 m-4 text-2xl p-1"
+          className="rounded-md border-solid border-2 hover:bg-blue-900 m-4 text-xl p-1"
           onClick={() => setOpen((prev) => !prev)}
         >
           {`${sortParameter}↓`}
@@ -39,7 +39,7 @@ const ShowSortOptions = ({ sortParameter, setSortParameter }) => {
           </div>
         ) : null}
       </div>
-    </>
+    </div>
   );
 };
 

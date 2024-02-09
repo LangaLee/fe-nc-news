@@ -16,5 +16,3 @@ add sorted functionality to comments
 what happens when you try delete a comment and you are offline ?
 
 refactor the project and remove unneccesary states
-
-when you refresh the page it signs you out ?

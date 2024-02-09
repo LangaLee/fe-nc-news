@@ -11,14 +11,19 @@ const Login = () => {
   const { setLoggedIn } = useContext(loggedInUserContext);
   const [users, setUsers] = useState([]);
   const [isloading, setIsLoading] = useState(true);
-  const { url } = useContext(urlContext);
+  const { url, setUrl } = useContext(urlContext);
 
   useEffect(() => {
     fetchUsers(setUsers, setIsLoading);
+    if (url === "") {
+      setUrl("/");
+    }
   }, []);
 
   const handleLogin = (e, profile_pic) => {
     setLoggedIn({ value: true, user: e.target.innerText, profile_pic });
+    localStorage.user = e.target.innerText;
+    localStorage.profile_pic = profile_pic;
   };
   return (
     <div className="flex flex-col max-w-96">

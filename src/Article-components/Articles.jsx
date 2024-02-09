@@ -66,22 +66,18 @@ const Articles = () => {
   }, []);
   return (
     <div>
-      <div className="flex justify-between sticky top-20 bg-slate-950 h-20 overflow-visible">
-        <h2 className=" text-3xl mt-4 text-center">
-          {displayProperty
-            ? `Displaying all ${displayProperty} articles`
-            : `Displaying All Articles`}
-        </h2>
-        <div className="flex flex-row">
-          <div className="flex flex-row">
-            <ShowSortOptions
-              sortParameter={sortParameter}
-              setSortParameter={setSortParameter}
-            />
-          </div>
-          <Button value={order} func={handleOrder} />
-        </div>
+      <div className="flex justify-between sticky  top-20 bg-slate-950 h-20 overflow-visible">
+        <ShowSortOptions
+          sortParameter={sortParameter}
+          setSortParameter={setSortParameter}
+        />
+        <Button value={order} func={handleOrder} />
       </div>
+      <h2 className=" text-2xl mt-4 text-center">
+        {displayProperty
+          ? `Displaying all ${displayProperty} articles`
+          : `Displaying All Articles`}
+      </h2>
       <div className="flex flex-wrap justify-center ">
         {isLoading ? (
           <Loading />

@@ -4,37 +4,50 @@ import { useContext } from "react";
 import loggedInUserContext from "../context/loggedInContext";
 import Divider from "../Reusable-components/Divider";
 import errorContext from "../context/error";
+import { useState } from "react";
+
 const Header = () => {
   const { loggedIn } = useContext(loggedInUserContext);
   const { setError, error } = useContext(errorContext);
+  const [optionsOpen, setOptionsOpen] = useState(false);
 
   return (
-    <div className="flex sticky top-0 items-center h-20 bg-black justify-between">
+    <div className="flex sticky top-0 items-center h-20 bg-black justify-between overflow-visible">
       <Link to={"/"} onClick={() => setError(false)}>
-        <h1 className="text-7xl">NC News</h1>
+        <h1 className="text-2xl">NC News</h1>
       </Link>
-      <div>
+      <div className="flex flex-row">
         {!loggedIn.value ? (
           <Link to={"/login"}>
             <Button value={"Sign in"} />
           </Link>
         ) : null}
-
         {loggedIn.value ? (
-          <Link>
-            <div className="flex">
-              <div>
-                <Button value={loggedIn.user} />
-              </div>
-              <div>
-                <img
-                  src={loggedIn.profile_pic}
-                  alt={`profile picture for the user ${loggedIn.user}`}
-                  className=" h-16 w-16 rounded-full "
-                />
-              </div>
+          <div className="flex flex-row-reverse  h-20 items-end overflow-visible">
+            <div className="mr-2 mt-2 ">
+              <img
+                onClick={() => setOptionsOpen((prev) => !prev)}
+                src={loggedIn.profile_pic}
+                alt={`profile picture for the user ${loggedIn.user}`}
+                className=" h-16 w-16 rounded-full "
+              />
             </div>
-          </Link>
+            {optionsOpen ? (
+              <div
+                className="flex flex-col 
+               top-20"
+              >
+                <Link to={"/login"}>
+                  <button
+                    className="rounded-md border-solid border-2 hover:bg-blue-900 m-4 text-xl p-1"
+                    onClick={() => setOptionsOpen((prev) => !prev)}
+                  >
+                    Change user
+                  </button>
+                </Link>
+              </div>
+            ) : null}
+          </div>
         ) : null}
       </div>
     </div>
