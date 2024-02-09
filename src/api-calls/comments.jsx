@@ -12,6 +12,7 @@ const getComments = async (articleId, setComments, setError) => {
   } catch (error) {
     setError((prev) => {
       if (prev === false) return "Could not load comments";
+      else setError(prev);
     });
   }
 };
