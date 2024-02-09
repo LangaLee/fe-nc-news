@@ -13,6 +13,8 @@ fix comment input such that it expands instead of using a scroll bar
 
 add sorted functionality to comments
 
+fix pagination as it wont show previous pages
+
 what happens when you try delete a comment and you are offline ?
 
 refactor the project and remove unneccesary states
