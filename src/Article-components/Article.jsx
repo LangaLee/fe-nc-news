@@ -11,6 +11,8 @@ import CommentInput from "./CommentInput";
 import urlContext from "../context/urlContext";
 import loggedInUserContext from "../context/loggedInContext";
 import errorContext from "../context/error";
+import getLikes from "../api-calls/getLikes";
+import { postLikes } from "../api-calls/getLikes";
 
 const Article = () => {
   const { loggedIn } = useContext(loggedInUserContext);
@@ -21,6 +23,7 @@ const Article = () => {
     state: "Show Comments",
     hidden: true,
   });
+  const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState(null);
   const [errorVoting, setErrorVoting] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -31,7 +34,7 @@ const Article = () => {
   const addComment = () => {
     setShowCommentInput(true);
   };
-
+  console.log(likes);
   const toggleComments = () => {
     if (hideComments.hidden === true) {
       setHideComments({ state: "Hide Comments", hidden: false });
@@ -42,7 +45,6 @@ const Article = () => {
       });
     }
   };
-
   const displayArticle = () => {
     return article.map((article) => {
       const Image = () => {
@@ -77,8 +79,49 @@ const Article = () => {
                 <div>
                   <button
                     onClick={() => {
-                      updateVotes(articleId, true, setErrorVoting);
-                      if (errorVoting === false) {
+                      if (
+                        errorVoting === false &&
+                        !likes.some((object) => {
+                          return (
+                            object.username === loggedIn.user &&
+                            object.article_id === article.article_id &&
+                            object.likes === 1
+                          );
+                        }) &&
+                        likes !== null
+                      ) {
+                        updateVotes(articleId, true, setErrorVoting);
+                        if (
+                          likes.some(
+                            (like) => like.article_id === article.article_id
+                          )
+                        ) {
+                          setLikes((prevState) => {
+                            return prevState.map((like) => {
+                              if (like.article_id === article.article_id) {
+                                return { ...like, likes: 1 };
+                              } else {
+                                return like;
+                              }
+                            });
+                          });
+                        } else {
+                          setLikes((prevState) => {
+                            return [
+                              ...prevState,
+                              {
+                                username: loggedIn.user,
+                                article_id: article.article_id,
+                                likes: 1,
+                              },
+                            ];
+                          });
+                          postLikes(loggedIn.user, {
+                            username: loggedIn.user,
+                            article_id: article.article_id,
+                            likes: 1,
+                          });
+                        }
                         const articleCopy = { ...article };
                         articleCopy.votes = articleCopy.votes + 1;
                         setArticle([articleCopy]);
@@ -90,8 +133,49 @@ const Article = () => {
                   </button>
                   <button
                     onClick={() => {
-                      updateVotes(articleId, false, setErrorVoting);
-                      if (errorVoting === false) {
+                      if (
+                        errorVoting === false &&
+                        !likes.some((object) => {
+                          return (
+                            object.username === loggedIn.user &&
+                            object.article_id === article.article_id &&
+                            object.likes === -1
+                          );
+                        }) &&
+                        likes !== null
+                      ) {
+                        updateVotes(articleId, false, setErrorVoting);
+                        if (
+                          likes.some(
+                            (like) => like.article_id === article.article_id
+                          )
+                        ) {
+                          setLikes((prevState) => {
+                            return prevState.map((like) => {
+                              if (like.article_id === article.article_id) {
+                                return { ...like, likes: -1 };
+                              } else {
+                                return like;
+                              }
+                            });
+                          });
+                        } else {
+                          setLikes((prevState) => {
+                            return [
+                              ...prevState,
+                              {
+                                username: loggedIn.user,
+                                article_id: article.article_id,
+                                likes: -1,
+                              },
+                            ];
+                          });
+                          postLikes(loggedIn.user, {
+                            username: loggedIn.user,
+                            article_id: article.article_id,
+                            likes: -1,
+                          });
+                        }
                         const articleCopy = { ...article };
                         articleCopy.votes = articleCopy.votes - 1;
                         setArticle([articleCopy]);
@@ -110,12 +194,16 @@ const Article = () => {
       );
     });
   };
-
   useEffect(() => {
     getComments(articleId, setComments, setError);
     getArticleById(articleId, setArticle, setIsLoading, setError);
     setUrl(`/${articleId}`);
   }, []);
+  useEffect(() => {
+    if (loggedIn.user) {
+      getLikes(loggedIn.user, setLikes);
+    }
+  }, [loggedIn.user]);
   const commentsCopy = JSON.parse(JSON.stringify(comments));
   const [sortedComments, setSortedComments] = useState([]);
   useEffect(() => {
