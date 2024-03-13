@@ -12,7 +12,7 @@ import urlContext from "../context/urlContext";
 import loggedInUserContext from "../context/loggedInContext";
 import errorContext from "../context/error";
 import getLikes from "../api-calls/getLikes";
-import { postLikes } from "../api-calls/getLikes";
+import { postLikes, patchLikes } from "../api-calls/getLikes";
 
 const Article = () => {
   const { loggedIn } = useContext(loggedInUserContext);
@@ -23,18 +23,17 @@ const Article = () => {
     state: "Show Comments",
     hidden: true,
   });
-  const [likes, setLikes] = useState(undefined);
+  const [likes, setLikes] = useState({ likes: 0 });
   const [comments, setComments] = useState(null);
   const [errorVoting, setErrorVoting] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [errorPostingComment, setErrorPostingComment] = useState(null);
   const { setError } = useContext(errorContext);
   const { setUrl } = useContext(urlContext);
-
+  const [likesLoaded, setLikesLoaded] = useState(false);
   const addComment = () => {
     setShowCommentInput(true);
   };
-  console.log(likes);
 
   const toggleComments = () => {
     if (hideComments.hidden === true) {
@@ -78,74 +77,84 @@ const Article = () => {
                   </p>
                 )}
                 <div>
-                  <button
-                    onClick={() => {
-                      if (
-                        likes === undefined ||
-                        (errorVoting === false && likes.likes !== 1)
-                      ) {
-                        updateVotes(articleId, true, setErrorVoting);
-                        if (likes === undefined) {
-                          setLikes((prevState) => {
-                            return {
+                  {likesLoaded && likes.likes !== 1 ? (
+                    <button
+                      onClick={() => {
+                        if (
+                          likes.likes === 0 ||
+                          (errorVoting === false && likes.likes !== 1)
+                        ) {
+                          updateVotes(articleId, true, setErrorVoting);
+                          if (likes.likes === 0) {
+                            setLikes((prevState) => {
+                              return {
+                                username: loggedIn.user,
+                                article_id: article.article_id,
+                                likes: 1,
+                              };
+                            });
+                            postLikes(loggedIn.user, {
                               username: loggedIn.user,
                               article_id: article.article_id,
                               likes: 1,
-                            };
-                          });
-                          postLikes(loggedIn.user, {
-                            username: loggedIn.user,
-                            article_id: article.article_id,
-                            likes: 1,
-                          });
-                        } else if (likes.likes === -1) {
-                          setLikes((prevState) => {
-                            return { ...prevState, likes: 1 };
-                          });
+                            });
+                          } else if (likes.likes === -1) {
+                            setLikes((prevState) => {
+                              return { ...prevState, likes: 1 };
+                            });
+                            patchLikes(loggedIn.user, article.article_id, {
+                              likes: 1,
+                            });
+                          }
+                          const articleCopy = { ...article };
+                          articleCopy.votes = articleCopy.votes + 1;
+                          setArticle([articleCopy]);
                         }
-                        const articleCopy = { ...article };
-                        articleCopy.votes = articleCopy.votes + 1;
-                        setArticle([articleCopy]);
-                      }
-                    }}
-                    className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 text-2xl"
-                  >
-                    add Vote
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (
-                        likes === undefined ||
-                        (errorVoting === false && likes.likes !== -1)
-                      ) {
-                        updateVotes(articleId, false, setErrorVoting);
-                        if (likes === undefined) {
-                          setLikes((prevState) => {
-                            return {
+                      }}
+                      className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 text-2xl"
+                    >
+                      add Vote
+                    </button>
+                  ) : null}
+                  {likesLoaded && likes.likes !== -1 ? (
+                    <button
+                      onClick={() => {
+                        if (
+                          likes.likes === 0 ||
+                          (errorVoting === false && likes.likes !== -1)
+                        ) {
+                          updateVotes(articleId, false, setErrorVoting);
+                          if (likes.likes === 0) {
+                            setLikes((prevState) => {
+                              return {
+                                username: loggedIn.user,
+                                article_id: article.article_id,
+                                likes: -1,
+                              };
+                            });
+                            postLikes(loggedIn.user, {
                               username: loggedIn.user,
                               article_id: article.article_id,
                               likes: -1,
-                            };
-                          });
-                          postLikes(loggedIn.user, {
-                            username: loggedIn.user,
-                            article_id: article.article_id,
-                            likes: -1,
-                          });
-                        } else if (likes.likes === 1) {
-                          setLikes((prevState) => {
-                            return { ...prevState, likes: -1 };
-                          });
+                            });
+                          } else if (likes.likes === 1) {
+                            setLikes((prevState) => {
+                              return { ...prevState, likes: -1 };
+                            });
+                            patchLikes(loggedIn.user, article.article_id, {
+                              likes: -1,
+                            });
+                          }
+                          const articleCopy = { ...article };
+                          articleCopy.votes = articleCopy.votes - 1;
+                          setArticle([articleCopy]);
                         }
-                        const articleCopy = { ...article };
-                        articleCopy.votes = articleCopy.votes - 1;
-                        setArticle([articleCopy]);
-                      }
-                    }}
-                    className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 ml-4 text-2xl"
-                  >
-                    remove Vote
-                  </button>
+                      }}
+                      className="p-1 rounded-md border-solid border-2 hover:bg-blue-900 mt-4 ml-4 text-2xl"
+                    >
+                      remove Vote
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -162,7 +171,7 @@ const Article = () => {
   }, []);
   useEffect(() => {
     if (loggedIn.user) {
-      getLikes(loggedIn.user, setLikes, articleId);
+      getLikes(loggedIn.user, setLikes, articleId, setLikesLoaded);
     }
   }, [loggedIn.user]);
   const commentsCopy = JSON.parse(JSON.stringify(comments));
