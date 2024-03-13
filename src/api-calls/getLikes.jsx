@@ -1,15 +1,12 @@
 import axios from "axios";
 
-const getLikes = async (username, setLikes) => {
+const getLikes = async (username, setLikes, article_id) => {
   try {
-    console.log(username, "<likes by");
     const response = await axios.get(
-      `https://fun-news.onrender.com/api/users/${username}/likes`
+      `https://fun-news.onrender.com/api/users/${username}/${article_id}/likes`
     );
-    console.log("Hi");
     const { likes } = response.data;
-
-    setLikes([likes]);
+    setLikes(likes);
   } catch (error) {
     console.log(error);
   }
