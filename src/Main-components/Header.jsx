@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import Button from "../Reusable-components/Button";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import loggedInUserContext from "../context/loggedInContext";
 import Divider from "../Reusable-components/Divider";
 import errorContext from "../context/error";
 import { useState } from "react";
-
+import urlContext from "../context/urlContext";
 const Header = () => {
   const { loggedIn } = useContext(loggedInUserContext);
+  const { url, setUrl } = useContext(urlContext);
   const { setError, error } = useContext(errorContext);
   const [optionsOpen, setOptionsOpen] = useState(false);
-
   return (
     <div className="flex sticky top-0 items-center h-20 bg-black justify-between overflow-visible">
       <Link to={"/"} onClick={() => setError(false)}>
@@ -18,9 +18,16 @@ const Header = () => {
       </Link>
       <div className="flex flex-row">
         {!loggedIn.value ? (
-          <Link to={"/login"}>
-            <Button value={"Sign in"} />
-          </Link>
+          url === "/login" ? null : (
+            <Link
+              to={"/login"}
+              onClick={() => {
+                setUrl("/login");
+              }}
+            >
+              <Button value={"Sign in"} />
+            </Link>
+          )
         ) : null}
         {loggedIn.value ? (
           <div className="flex flex-row-reverse  h-20 items-end overflow-visible">
