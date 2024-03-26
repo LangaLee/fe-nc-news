@@ -13,6 +13,7 @@ const Home = () => {
 
   useEffect(() => {
     setUrl("/");
+    localStorage.url = "/";
     getAllArticles(setTrending, null, "trending");
   }, []);
 

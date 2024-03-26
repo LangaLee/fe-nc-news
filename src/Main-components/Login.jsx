@@ -19,7 +19,6 @@ const Login = () => {
   }, []);
 
   const handleLogin = (e, profile_pic) => {
-    console.dir(e.target[0].value);
     e.preventDefault();
     const LoginName = e.target[0].value;
     if (users.some((user) => user.username === LoginName)) {
@@ -29,6 +28,7 @@ const Login = () => {
             value: true,
             user: LoginName,
             profile_pic: user.avatar_url,
+            continue: true,
           });
           localStorage.user = user;
           localStorage.profile_pic = user.avatar_url;
@@ -36,11 +36,54 @@ const Login = () => {
       });
     }
   };
-  return (
+  return loggedIn.value ? (
+    loggedIn.continue ? (
+      <div className="flex justify-center align-middle mt-40">
+        <div className="flex flex-row items-center">
+          <div className="flex flex-col">
+            <p className="text-2xl mb-4">logging in as {loggedIn.user}</p>
+            <img
+              className=" rounded-full"
+              src={loggedIn.profile_pic}
+              alt={`avatar chosed by the user ${loggedIn.user}`}
+            />
+          </div>
+          <div className="ml-8">
+            <Link to={localStorage.url}>
+              <button
+                className="rounded-md border-solid border-2 hover:bg-blue-900 ml-6 text-xl px-2"
+                onClick={() => {
+                  setLoggedIn((prevState) => {
+                    return { ...prevState, continue: false };
+                  });
+                }}
+              >
+                Continue
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="flex justify-center align-middle h-72">
+        <Link to={localStorage.url}>
+          <button
+            className="rounded-md border-solid border-2 hover:bg-blue-900 m-4 h-14 text-xl p-2 mt-60"
+            onClick={() => {
+              setLoggedIn({ value: false });
+              localStorage.clear();
+            }}
+          >
+            Sign Out
+          </button>
+        </Link>
+      </div>
+    )
+  ) : (
     <div className="flex justify-center align-bottom w-screen h-72">
       <form onSubmit={handleLogin} className="flex flex-col w-2/4 mt-48">
         <label>Username</label>
-        <input type="text" className=" text-black text-xl" />
+        <input type="text" className=" text-black text-xl" required={true} />
         <label>Password</label>
         <input type="password" />
         <button id="">Login</button>
