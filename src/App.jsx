@@ -9,6 +9,7 @@ import urlContext from "./context/urlContext";
 import Login from "./Main-components/Login";
 import errorContext from "./context/error";
 import ErrorPage from "./Main-components/ErrorPage";
+import Register from "./Main-components/registerPage";
 
 function App() {
   const [articleId, setArticleId] = useState(null);
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/:article_id" element={<Article />} />
                 <Route path="/articles/:topic" element={<Articles />} />
+                <Route path="/register" element={<Register />} />
               </Routes>
             )}
           </errorContext.Provider>

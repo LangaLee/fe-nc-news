@@ -88,6 +88,7 @@ const Login = () => {
         <input type="password" />
         <button id="">Login</button>
       </form>
+      <Link to={"/register"}>Don't have an account? Register Here</Link>
     </div>
   );
 };
