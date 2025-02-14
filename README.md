@@ -1,6 +1,6 @@
 # NC news
 
-This is an app that uses the NC News API (https://fun-news.onrender.com/api). It allows users to view articles, login, view comments, add comments and vote on an article. To use the app you have to go to the website (https://news-for-gen-z.netlify.app/).
+This is an app that uses the NC News API (https://fun-news.onrender.com/api). It allows users to view articles, login, view comments, add comments and vote on an article. To use the app you have to go to the website ([https://news-for-gen-z.netlify.app/](https://newsforgenz.netlify.app/)).
 
 The plan for this project is available at "https://excalidraw.com/#json=lOH6ZefyATBSSE8iRAUhf,UG4QV2cVE5vh1AvTTFKS3Q"
 
